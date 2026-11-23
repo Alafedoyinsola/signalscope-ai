@@ -12,17 +12,20 @@ export function LocalHistoryCard({ history }: LocalHistoryCardProps) {
     return (
       <div className="card local-history-card history-insufficient">
         <div className="card-header-compact">
-          <h3 className="section-title">
-            <span className="section-icon">⏱</span>
-            Local Snapshot Buffer
-          </h3>
-          <span className="badge-insufficient">
-            {history.observationCount} / {history.requiredObservations} Observations
+          <div className="section-title-group">
+            <svg className="panel-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <h3 className="section-title">LOCAL IN-MEMORY SNAPSHOT BUFFER</h3>
+          </div>
+          <span className="badge-insufficient font-mono">
+            {history.observationCount} / {history.requiredObservations} OBSERVATIONS
           </span>
         </div>
-        <p className="history-message">{history.message}</p>
-        <div className="history-footnote text-muted">
-          Continuous local pattern forensics requires a minimum of 5 sampled observations.
+        <p className="history-message font-mono">{history.message}</p>
+        <div className="history-footnote text-dim font-mono">
+          Continuous local pattern forensics requires a minimum of 5 sampled live observations.
           Snapshots accumulate in a 120-observation circular buffer (effective continuous intraday window ≤ 120 min).
         </div>
       </div>
@@ -40,12 +43,15 @@ export function LocalHistoryCard({ history }: LocalHistoryCardProps) {
   return (
     <div className="card local-history-card history-sufficient">
       <div className="card-header-compact">
-        <h3 className="section-title">
-          <span className="section-icon">⏱</span>
-          Local Snapshot History
-        </h3>
-        <span className="badge-sufficient">
-          {observationCount} Observations ({timeRange.durationMinutes}m window)
+        <div className="section-title-group">
+          <svg className="panel-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <h3 className="section-title">LOCAL INTRADAY SNAPSHOT RADAR</h3>
+        </div>
+        <span className="badge-sufficient font-mono">
+          {observationCount} OBSERVATIONS ({timeRange.durationMinutes}m WINDOW)
         </span>
       </div>
 
@@ -53,77 +59,83 @@ export function LocalHistoryCard({ history }: LocalHistoryCardProps) {
         <div className="history-metric-box">
           <span className="history-box-label">SAMPLED MIN</span>
           <span className="history-box-val font-mono">{formatCurrency(priceRange.min)}</span>
-          <span className="history-box-delta text-muted">
+          <span className="history-box-delta text-muted font-mono">
             {formatPercent(priceRange.deltaFromMinPercent)} from min
           </span>
         </div>
 
         <div className="history-metric-box highlight-box">
           <span className="history-box-label">CURRENT OBSERVED</span>
-          <span className="history-box-val font-mono font-bold">
+          <span className="history-box-val font-mono font-bold highlight-value">
             {formatCurrency(priceRange.current)}
           </span>
-          <span className="history-box-delta text-muted">
-            {timeRange.durationMinutes} min interval
+          <span className="history-box-delta text-muted font-mono">
+            {timeRange.durationMinutes} min interval window
           </span>
         </div>
 
         <div className="history-metric-box">
           <span className="history-box-label">SAMPLED MAX</span>
           <span className="history-box-val font-mono">{formatCurrency(priceRange.max)}</span>
-          <span className="history-box-delta text-muted">
+          <span className="history-box-delta text-muted font-mono">
             {formatPercent(priceRange.deltaFromMaxPercent)} from max
           </span>
         </div>
       </div>
 
-      {/* Lightweight SVG Range Bar */}
+      {/* Financial SVG Range Oscillator */}
       <div className="svg-range-container">
-        <div className="range-labels font-mono text-muted">
-          <span>Min: {formatCurrency(priceRange.min)}</span>
-          <span>Max: {formatCurrency(priceRange.max)}</span>
+        <div className="range-labels font-mono text-dim">
+          <span>MIN: {formatCurrency(priceRange.min)}</span>
+          <span className="range-center-label font-mono">SPREAD: {formatPercent(((priceSpread / (priceRange.min || 1)) * 100))}</span>
+          <span>MAX: {formatCurrency(priceRange.max)}</span>
         </div>
         <svg
-          viewBox="0 0 400 16"
+          viewBox="0 0 400 20"
           className="range-svg"
           aria-label="Price range relative position"
         >
-          {/* Background track */}
-          <rect x="0" y="6" width="400" height="4" rx="2" fill="#334155" />
-          {/* Active filled track to current position */}
-          <rect
-            x="0"
-            y="6"
-            width={Math.round(currentRatio * 400)}
-            height="4"
-            rx="2"
-            fill="#38bdf8"
+          {/* Subtle baseline track */}
+          <line x1="10" y1="10" x2="390" y2="10" stroke="#243340" strokeWidth="2" strokeLinecap="round" />
+          {/* Ticks at 25%, 50%, 75% */}
+          <line x1="105" y1="7" x2="105" y2="13" stroke="#1A2733" strokeWidth="1" />
+          <line x1="200" y1="5" x2="200" y2="15" stroke="#243340" strokeWidth="1.5" />
+          <line x1="295" y1="7" x2="295" y2="13" stroke="#1A2733" strokeWidth="1" />
+          {/* Active filled range to current position */}
+          <line
+            x1="10"
+            y1="10"
+            x2={Math.round(10 + currentRatio * 380)}
+            y2="10"
+            stroke="#D6B779"
+            strokeWidth="2.5"
+            strokeLinecap="round"
           />
           {/* Current position marker */}
           <circle
-            cx={Math.round(currentRatio * 400)}
-            cy="8"
-            r="6"
-            fill="#38bdf8"
-            stroke="#0f172a"
+            cx={Math.round(10 + currentRatio * 380)}
+            cy="10"
+            r="5"
+            fill="#D6B779"
+            stroke="#101820"
             strokeWidth="2"
           />
         </svg>
       </div>
 
       {volumeRange.min !== null && volumeRange.max !== null && (
-        <div className="volume-summary text-muted">
-          <span>Observed Volume Range: </span>
-          <span className="font-mono">
+        <div className="volume-summary text-dim font-mono">
+          <span>OBSERVED VOLUME SPREAD: </span>
+          <span className="text-silver">
             {formatCurrency(volumeRange.min)} — {formatCurrency(volumeRange.max)}
           </span>
           <span className="time-window">
-            (Window: {formatTimestamp(timeRange.start)} to {formatTimestamp(timeRange.end)})
+            ({formatTimestamp(timeRange.start)} → {formatTimestamp(timeRange.end)})
           </span>
         </div>
       )}
 
-      <p className="disclaimer-text text-muted">{disclaimer}</p>
+      <p className="disclaimer-text text-dim font-mono">{disclaimer}</p>
     </div>
   )
 }

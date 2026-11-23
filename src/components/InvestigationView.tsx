@@ -41,29 +41,35 @@ export function InvestigationView({
 
   return (
     <div className="investigation-container">
-      {/* Top Navigation & Close Bar */}
+      {/* Top Breadcrumb & Status Bar */}
       <div className="investigation-top-bar">
         <button type="button" className="btn-back" onClick={onClose}>
-          ← Back to Market Table
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          <span>RETURN TO MARKET UNIVERSE</span>
         </button>
+
         <div className="investigation-badges">
-          <span className={`badge-source ${isLive ? 'badge-live' : 'badge-mock'}`}>
-            ● {isLive ? 'LIVE COINMARKETCAP' : 'MOCK FIXTURE'}
+          <span className={`badge-source font-mono ${isLive ? 'badge-live' : 'badge-mock'}`}>
+            <span className="status-dot"></span>
+            {isLive ? 'SOURCE: LIVE COINMARKETCAP' : 'SOURCE: MOCK FIXTURE'}
           </span>
-          <span className="badge-timestamp text-muted">
-            Generated: {formatTimestamp(report.generatedAt)}
+          <span className="badge-timestamp font-mono text-dim">
+            EVALUATED: {formatTimestamp(report.generatedAt)}
           </span>
         </div>
       </div>
 
-      {/* Hero Asset Card */}
+      {/* Asset Command Dossier Hero Card */}
       <div className="card asset-hero-card">
         <div className="hero-main-row">
           <div className="hero-identity">
             <div className="hero-symbol-row">
-              <span className="hero-rank">#{asset.rank ?? '—'}</span>
+              <span className="hero-rank font-mono">#{asset.rank ?? '—'}</span>
               <h2 className="hero-symbol">{asset.symbol}</h2>
-              <span className="hero-name">{asset.name}</span>
+              <span className="hero-name text-muted">{asset.name}</span>
             </div>
             <div className="hero-price-row">
               <span className="hero-price font-mono font-bold">
@@ -74,15 +80,15 @@ export function InvestigationView({
                   isBullish ? 'pill-positive' : 'pill-negative'
                 }`}
               >
-                {formatPercent(quote.percentChange24h)} (24h)
+                {formatPercent(quote.percentChange24h)} (24H)
               </span>
             </div>
           </div>
 
-          {/* Rolling Window Matrix */}
+          {/* Rolling Window Multi-Period Grid */}
           <div className="rolling-windows-grid">
             <div className="window-box">
-              <span className="window-label">1 HOUR</span>
+              <span className="window-label font-mono">1 HOUR</span>
               <span
                 className={`window-value font-mono ${
                   (quote.percentChange1h ?? 0) >= 0 ? 'text-positive' : 'text-negative'
@@ -92,7 +98,7 @@ export function InvestigationView({
               </span>
             </div>
             <div className="window-box">
-              <span className="window-label">24 HOURS</span>
+              <span className="window-label font-mono">24 HOURS</span>
               <span
                 className={`window-value font-mono font-bold ${
                   (quote.percentChange24h ?? 0) >= 0 ? 'text-positive' : 'text-negative'
@@ -102,7 +108,7 @@ export function InvestigationView({
               </span>
             </div>
             <div className="window-box">
-              <span className="window-label">7 DAYS</span>
+              <span className="window-label font-mono">7 DAYS</span>
               <span
                 className={`window-value font-mono ${
                   (quote.percentChange7d ?? 0) >= 0 ? 'text-positive' : 'text-negative'
@@ -112,7 +118,7 @@ export function InvestigationView({
               </span>
             </div>
             <div className="window-box">
-              <span className="window-label">30 DAYS</span>
+              <span className="window-label font-mono">30 DAYS</span>
               <span
                 className={`window-value font-mono ${
                   (quote.percentChange30d ?? 0) >= 0 ? 'text-positive' : 'text-negative'
@@ -124,14 +130,14 @@ export function InvestigationView({
           </div>
         </div>
 
-        {/* Fundamental & Liquidity Stats */}
+        {/* Fundamental Statistics & Valuation Metrics */}
         <div className="hero-stats-row">
           <div className="stat-item">
-            <span className="stat-label">24H VOLUME</span>
+            <span className="stat-label font-mono">24H VOLUME</span>
             <span className="stat-value font-mono">{formatCurrency(quote.volume24h)}</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">VOLUME DELTA (24H)</span>
+            <span className="stat-label font-mono">VOLUME DELTA (24H)</span>
             <span
               className={`stat-value font-mono ${
                 (quote.volumeChange24h ?? 0) >= 0 ? 'text-positive' : 'text-negative'
@@ -141,34 +147,39 @@ export function InvestigationView({
             </span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">MARKET CAP</span>
+            <span className="stat-label font-mono">MARKET CAP</span>
             <span className="stat-value font-mono">{formatCurrency(quote.marketCap)}</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">FDV</span>
+            <span className="stat-label font-mono">FDV</span>
             <span className="stat-value font-mono">{formatCurrency(quote.fdv)}</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">CIRCULATING SUPPLY</span>
+            <span className="stat-label font-mono">CIRCULATING SUPPLY</span>
             <span className="stat-value font-mono">
               {formatNumber(quote.circulatingSupply)}
             </span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">TOTAL SUPPLY</span>
+            <span className="stat-label font-mono">TOTAL SUPPLY</span>
             <span className="stat-value font-mono">{formatNumber(quote.totalSupply)}</span>
           </div>
         </div>
 
-        {/* BTC Benchmark Comparison Strip */}
+        {/* BTC Benchmark Alpha Strip */}
         <div className="benchmark-strip">
-          <span className="benchmark-title">⚡ BENCHMARK COMPARISON (BTC):</span>
-          <div className="benchmark-details">
+          <div className="benchmark-title-wrap">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            <span className="benchmark-title font-mono">BENCHMARK COMPARISON // BTC CORRELATION:</span>
+          </div>
+          <div className="benchmark-details font-mono">
             <span>
-              BTC 24h Change: <strong>{formatPercent(benchmark.btcPercentChange24h)}</strong>
+              BTC 24h Move: <strong className="text-silver">{formatPercent(benchmark.btcPercentChange24h)}</strong>
             </span>
             <span>
-              Relative Alpha / Delta:{' '}
+              Relative Alpha / Divergence:{' '}
               <strong
                 className={
                   (benchmark.relative24hDelta ?? 0) >= 0
@@ -183,10 +194,10 @@ export function InvestigationView({
         </div>
       </div>
 
-      {/* Local Snapshot History Component */}
+      {/* Local Snapshot Intraday History Oscillator */}
       <LocalHistoryCard history={localHistory} />
 
-      {/* Prominent Counterargument & AI Synthesis Section */}
+      {/* Prominent Counterargument & Meta AI Synthesis */}
       <CounterargumentViewer
         aiExplanation={aiExplanation}
         assessment={assessment}
@@ -195,21 +206,21 @@ export function InvestigationView({
         symbol={asset.symbol}
       />
 
-      {/* Deterministic Indicators & Evidence Breakdown */}
+      {/* Deterministic Indicators & Evidence Matrix */}
       <div className="card indicators-section">
         <div className="indicators-header">
           <div>
             <div className="section-pill-row">
-              <span className="pill-ground-truth">
-                🛡 DETERMINISTIC FORENSIC GROUND TRUTH
+              <span className="pill-ground-truth font-mono">
+                DETERMINISTIC GROUND TRUTH MATRIX
               </span>
-              <span className="pill-rules">Rule-Engine Evaluated</span>
+              <span className="pill-rules font-mono">Mathematical Rules Verification</span>
             </div>
             <h3 className="section-title-large">
-              Detected Indicators & Evidence Matrix ({indicators.detected.length})
+              Detected Forensic Indicators ({indicators.detected.length})
             </h3>
             <p className="section-subtitle">
-              Calculated without probabilistic estimation. All indicators traceable to exact formulas, thresholds, and market data.
+              Calculated without heuristic speculation. Every indicator is fully traceable to exact formulas, thresholds, and market data.
             </p>
           </div>
 
@@ -217,51 +228,54 @@ export function InvestigationView({
           <div className="tab-group">
             <button
               type="button"
-              className={`tab-btn ${activeEvidenceTab === 'all' ? 'active' : ''}`}
+              className={`tab-btn font-mono ${activeEvidenceTab === 'all' ? 'active' : ''}`}
               onClick={() => setActiveEvidenceTab('all')}
             >
-              All Detected ({indicators.detected.length})
+              ALL ({indicators.detected.length})
             </button>
             <button
               type="button"
-              className={`tab-btn ${activeEvidenceTab === 'supporting' ? 'active' : ''}`}
+              className={`tab-btn font-mono ${activeEvidenceTab === 'supporting' ? 'active' : ''}`}
               onClick={() => setActiveEvidenceTab('supporting')}
             >
-              Supporting ({indicators.supportingEvidence.length})
+              SUPPORTING ({indicators.supportingEvidence.length})
             </button>
             <button
               type="button"
-              className={`tab-btn ${activeEvidenceTab === 'contradictory' ? 'active' : ''}`}
+              className={`tab-btn font-mono ${activeEvidenceTab === 'contradictory' ? 'active' : ''}`}
               onClick={() => setActiveEvidenceTab('contradictory')}
             >
-              Contradictory ({indicators.contradictoryEvidence.length})
+              CONTRADICTORY ({indicators.contradictoryEvidence.length})
             </button>
             <button
               type="button"
-              className={`tab-btn ${activeEvidenceTab === 'unavailable' ? 'active' : ''}`}
+              className={`tab-btn font-mono ${activeEvidenceTab === 'unavailable' ? 'active' : ''}`}
               onClick={() => setActiveEvidenceTab('unavailable')}
             >
-              Missing Dimensions ({indicators.unavailableEvidence.length})
+              MISSING ({indicators.unavailableEvidence.length})
             </button>
           </div>
         </div>
 
-        {/* Render Indicators or Empty State */}
+        {/* Render Indicators or Empty/Missing State */}
         {activeEvidenceTab === 'unavailable' ? (
           <div className="unavailable-dimensions-list">
             {indicators.unavailableEvidence.length === 0 ? (
-              <p className="text-muted">All forensic evidence dimensions are fully available.</p>
+              <p className="empty-text font-mono">All forensic evidence dimensions are verified and fully present.</p>
             ) : (
               indicators.unavailableEvidence.map((unav, idx) => (
                 <div key={idx} className="unavailable-card">
                   <div className="unav-header">
-                    <span className="unav-icon">∅</span>
-                    <strong className="unav-dimension">{unav.dimension}</strong>
+                    <svg className="unav-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                    </svg>
+                    <strong className="unav-dimension font-mono">{unav.dimension}</strong>
                   </div>
                   <p className="unav-reason text-muted">
                     <strong>Reason:</strong> {unav.reason}
                   </p>
-                  <p className="unav-impact">
+                  <p className="unav-impact font-mono">
                     <strong>Forensic Impact:</strong> {unav.impact}
                   </p>
                 </div>
@@ -281,7 +295,7 @@ export function InvestigationView({
               if (listToRender.length === 0) {
                 return (
                   <div className="empty-state">
-                    <p>No indicators match the selected evidence filter.</p>
+                    <p className="empty-text font-mono">No indicators match the selected evidence filter.</p>
                   </div>
                 )
               }

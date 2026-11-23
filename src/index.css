@@ -1,32 +1,57 @@
 :root {
-  --bg-primary: #0a0e17;
-  --bg-secondary: #111827;
-  --bg-card: #151d2d;
-  --bg-card-hover: #1b263b;
-  --bg-card-muted: #1e293b;
+  /* ==============================================================================
+     SignalScope AI — Institutional Fintech Design Tokens
+     ============================================================================== */
+  --bg-midnight: #101820;      /* Deep Midnight: primary terminal canvas */
+  --bg-slate: #141E28;         /* Dark Slate: secondary surfaces, sub-bars */
+  --bg-charcoal: #192630;      /* Slate Charcoal: panels, cards, rows */
+  --bg-elevated: #20303D;      /* Elevated Surface: hover states, selected items */
+  --bg-primary: var(--bg-midnight);
+  --bg-secondary: var(--bg-slate);
+  --bg-card: var(--bg-charcoal);
+  --bg-card-hover: var(--bg-elevated);
+  --bg-card-muted: #15222D;
 
-  --border-color: #27354a;
-  --border-subtle: #1c2636;
-  --border-highlight: #38bdf8;
+  /* Structural Hairlines & Borders */
+  --border-base: #243340;      /* Primary structural border */
+  --border-subtle: #1A2733;    /* Subtle hairline dividers */
+  --border-highlight: #D6B779; /* Champagne Gold accent highlight */
+  --border-color: var(--border-base);
 
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
+  /* Typography Hierarchy */
+  --text-primary: #F0F4F8;     /* Crisp readout text */
+  --text-silver: #A7B5C1;      /* Cool Silver: metadata, column labels */
+  --text-muted: #7E8F9F;       /* Steel Slate: secondary details */
+  --text-dim: #546473;         /* Dim footnotes, timestamps */
+  --text-main: var(--text-primary);
 
-  --accent-cyan: #38bdf8;
-  --accent-blue: #3b82f6;
-  --accent-purple: #a855f7;
-  --accent-emerald: #10b981;
-  --accent-rose: #f43f5e;
-  --accent-amber: #f59e0b;
+  /* Precision Semantic Accents */
+  --gold: #D6B779;             /* Champagne Gold: benchmark dominance, leading insights */
+  --gold-subtle: rgba(214, 183, 121, 0.12);
+  --gold-border: rgba(214, 183, 121, 0.3);
+  --emerald: #20B89A;          /* Muted Emerald: positive alpha, supporting evidence, live */
+  --emerald-subtle: rgba(32, 184, 154, 0.12);
+  --emerald-border: rgba(32, 184, 154, 0.28);
+  --crimson: #E05252;          /* Restrained Crimson: negative moves, contradictory warnings */
+  --crimson-subtle: rgba(224, 82, 82, 0.12);
+  --crimson-border: rgba(224, 82, 82, 0.28);
 
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Legacy Accent Aliases (Mapped to Institutional Palette) */
+  --accent-cyan: var(--text-silver);
+  --accent-blue: var(--gold);
+  --accent-purple: var(--gold);
+  --accent-emerald: var(--emerald);
+  --accent-rose: var(--crimson);
+  --accent-amber: var(--gold);
+
+  /* Typography & Tabular Numerals */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
   font-family: var(--font-sans);
   color-scheme: dark;
-  color: var(--text-main);
-  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  background-color: var(--bg-midnight);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -41,11 +66,12 @@
 
 body {
   margin: 0;
-  background-color: var(--bg-primary);
-  color: var(--text-main);
+  background-color: var(--bg-midnight);
+  color: var(--text-primary);
   min-height: 100vh;
-  line-height: 1.5;
-  font-size: 14px;
+  line-height: 1.45;
+  font-size: 13px;
+  overflow-x: hidden;
 }
 
 #root {
@@ -55,12 +81,14 @@ body {
 }
 
 a {
-  color: var(--accent-cyan);
+  color: var(--gold);
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: var(--text-primary);
+  text-decoration: none;
 }
 
 button {
@@ -69,10 +97,19 @@ button {
   cursor: pointer;
   border: none;
   background: none;
+  color: inherit;
 }
 
 input {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
+}
+
+/* Financial Tabular Lining Figures */
+.font-mono,
+.tabular-nums {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' on, 'zero' on;
 }

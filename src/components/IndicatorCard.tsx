@@ -21,13 +21,13 @@ export function IndicatorCard({ indicator }: IndicatorCardProps) {
     >
       <div className="indicator-top-row">
         <div className="indicator-title-group">
-          <span className="indicator-badge-category">
-            {isSupporting ? '✓ SUPPORTING' : isContradictory ? '⚠ CONTRADICTORY' : '● NEUTRAL'}
+          <span className="indicator-badge-category font-mono">
+            {isSupporting ? '● SUPPORTING' : isContradictory ? '▲ CONTRADICTORY' : '■ NEUTRAL'}
           </span>
           <h4 className="indicator-name">{indicator.name}</h4>
         </div>
         <span
-          className={`indicator-significance sig-${indicator.significance.toLowerCase()}`}
+          className={`indicator-significance font-mono sig-${indicator.significance.toLowerCase()}`}
           title={`Indicator Significance: ${indicator.significance}`}
         >
           {indicator.significance} IMPACT
@@ -38,16 +38,16 @@ export function IndicatorCard({ indicator }: IndicatorCardProps) {
 
       {/* Traceable Threshold Condition */}
       <div className="indicator-threshold-box">
-        <span className="threshold-label">RULE / THRESHOLD:</span>
-        <code className="threshold-code">{indicator.threshold}</code>
+        <span className="threshold-label font-mono">ALGORITHMIC RULE // THRESHOLD:</span>
+        <code className="threshold-code font-mono">{indicator.threshold}</code>
       </div>
 
-      {/* Measured Metrics */}
+      {/* Measured Metrics Grid */}
       {indicator.measuredMetrics.length > 0 && (
         <div className="indicator-metrics-grid">
           {indicator.measuredMetrics.map((m) => (
             <div key={m.field} className="metric-pill">
-              <span className="metric-pill-label">{m.label}</span>
+              <span className="metric-pill-label font-mono">{m.label.toUpperCase()}</span>
               <span className="metric-pill-value font-mono">{m.formatted}</span>
             </div>
           ))}
@@ -55,8 +55,8 @@ export function IndicatorCard({ indicator }: IndicatorCardProps) {
       )}
 
       <div className="indicator-footer">
-        <span className="indicator-timestamp">
-          Observed: {formatTimestamp(indicator.evidenceTimestamp)}
+        <span className="indicator-timestamp font-mono">
+          OBSERVED: {formatTimestamp(indicator.evidenceTimestamp)}
         </span>
       </div>
     </div>
