@@ -10,6 +10,7 @@ import {
   formatTimestamp,
 } from '../utils/formatters.ts'
 import { CounterargumentViewer } from './CounterargumentViewer.tsx'
+import { CryptoLogo } from './CryptoLogo.tsx'
 import { IndicatorCard } from './IndicatorCard.tsx'
 import { LocalHistoryCard } from './LocalHistoryCard.tsx'
 
@@ -67,6 +68,7 @@ export function InvestigationView({
         <div className="hero-main-row">
           <div className="hero-identity">
             <div className="hero-symbol-row">
+              <CryptoLogo id={asset.id} symbol={asset.symbol} name={asset.name} size={28} />
               <span className="hero-rank font-mono">#{asset.rank ?? '—'}</span>
               <h2 className="hero-symbol">{asset.symbol}</h2>
               <span className="hero-name text-muted">{asset.name}</span>

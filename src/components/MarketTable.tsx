@@ -5,6 +5,7 @@ import {
   formatNumber,
   formatPercent,
 } from '../utils/formatters.ts'
+import { CryptoLogo } from './CryptoLogo.tsx'
 
 interface MarketTableProps {
   quotes: MarketQuote[]
@@ -119,8 +120,11 @@ export function MarketTable({
                     <td className="col-rank font-mono text-muted">{q.rank ?? '—'}</td>
                     <td className="col-asset">
                       <div className="asset-cell">
-                        <strong className="asset-symbol">{q.symbol}</strong>
-                        <span className="asset-name text-muted">{q.name}</span>
+                        <CryptoLogo id={q.id} symbol={q.symbol} name={q.name} size={24} />
+                        <div className="asset-info">
+                          <strong className="asset-symbol">{q.symbol}</strong>
+                          <span className="asset-name text-muted">{q.name}</span>
+                        </div>
                       </div>
                     </td>
                     <td className="col-price font-mono font-medium text-right">

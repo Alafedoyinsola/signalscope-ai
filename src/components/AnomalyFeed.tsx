@@ -1,5 +1,6 @@
 import type { AnomalySummary } from '../types/forensics.ts'
 import { formatCurrency, formatPercent } from '../utils/formatters.ts'
+import { CryptoLogo } from './CryptoLogo.tsx'
 
 interface AnomalyFeedProps {
   anomalies: AnomalySummary[]
@@ -89,8 +90,11 @@ export function AnomalyFeed({
               >
                 <div className="anomaly-top">
                   <div className="anomaly-asset">
-                    <span className="anomaly-symbol">{item.symbol}</span>
-                    <span className="anomaly-name">{item.name}</span>
+                    <CryptoLogo symbol={item.symbol} name={item.name} size={20} />
+                    <div className="anomaly-asset-text">
+                      <span className="anomaly-symbol">{item.symbol}</span>
+                      <span className="anomaly-name">{item.name}</span>
+                    </div>
                   </div>
                   <div className="anomaly-stats">
                     <span className="anomaly-price font-mono">{formatCurrency(item.price)}</span>
