@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--bg-midnight);
+  background-color: transparent;
   color: var(--text-primary);
 }
 
@@ -30,8 +30,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 24px;
-  background-color: var(--bg-slate);
+  background-color: rgba(14, 22, 31, 0.82);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
   border-bottom: 1px solid var(--border-base);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
   gap: 16px;
   flex-wrap: wrap;
   min-height: 52px;
@@ -223,10 +226,12 @@
   align-items: center;
   gap: 6px;
   background-color: var(--bg-charcoal);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   color: var(--text-silver);
   border: 1px solid var(--border-base);
   padding: 5px 10px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
@@ -270,7 +275,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--bg-midnight);
+  background-color: rgba(11, 17, 24, 0.78);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   border-bottom: 1px solid var(--border-subtle);
   padding: 6px 24px;
   overflow-x: auto;
@@ -464,10 +471,17 @@
 /* Common Card Shell */
 .card {
   background-color: var(--bg-charcoal);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
   border: 1px solid var(--border-base);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-glass);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  border-color: rgba(167, 181, 193, 0.22);
 }
 
 /* Common Panel Header */
@@ -567,11 +581,13 @@
 
 .anomaly-card {
   background-color: var(--bg-slate);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   border: 1px solid var(--border-base);
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 10px 12px;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   outline: none;
 }
 
@@ -764,19 +780,22 @@
 }
 
 .search-input {
-  background-color: var(--bg-slate);
+  background-color: rgba(14, 22, 31, 0.65);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   border: 1px solid var(--border-base);
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 5px 26px 5px 28px;
   color: var(--text-primary);
   font-size: 11px;
   width: 250px;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .search-input:focus {
   border-color: var(--gold);
+  background-color: rgba(14, 22, 31, 0.85);
 }
 
 .search-input::placeholder {
@@ -814,7 +833,9 @@
   letter-spacing: 0.6px;
   color: var(--text-silver);
   border-bottom: 1px solid var(--border-base);
-  background-color: var(--bg-slate);
+  background-color: rgba(16, 25, 35, 0.92);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   white-space: nowrap;
   position: sticky;
   top: 0;
@@ -964,9 +985,11 @@
   letter-spacing: 0.4px;
   color: var(--text-silver);
   background-color: var(--bg-slate);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   border: 1px solid var(--border-base);
   padding: 3px 8px;
-  border-radius: 2px;
+  border-radius: 3px;
   transition: all 0.15s ease;
 }
 
@@ -1011,9 +1034,11 @@
   letter-spacing: 0.5px;
   color: var(--text-silver);
   background-color: var(--bg-slate);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   border: 1px solid var(--border-base);
   padding: 6px 12px;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: all 0.15s ease;
 }
 
@@ -1310,8 +1335,10 @@
 
 .history-metric-box {
   background-color: var(--bg-slate);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   border: 1px solid var(--border-base);
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 8px 12px;
   display: flex;
   flex-direction: column;
@@ -1764,8 +1791,10 @@
 
 .sub-panel {
   background-color: var(--bg-charcoal);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
   border: 1px solid var(--border-base);
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 12px;
   display: flex;
   flex-direction: column;

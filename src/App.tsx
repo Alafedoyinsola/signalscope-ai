@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import { AnomalyFeed } from './components/AnomalyFeed.tsx'
 import { GlobalMarketBanner } from './components/GlobalMarketBanner.tsx'
@@ -80,8 +80,13 @@ export function App() {
     }
   }, [])
 
-  // Manual refresh callback
+  // Concurrency guard to prevent overlapping refresh executions
+  const isRefreshingRef = useRef(false)
+
+  // Manual & automatic refresh callback
   const handleRefresh = useCallback(async () => {
+    if (isRefreshingRef.current) return
+    isRefreshingRef.current = true
     setIsLoadingMarket(true)
     setAppError(null)
     try {
@@ -111,8 +116,77 @@ export function App() {
       )
     } finally {
       setIsLoadingMarket(false)
+      isRefreshingRef.current = false
     }
   }, [])
+
+  // Automatic snapshot accumulation & market refresh policy:
+  // 90-second interval ensures cache expiration (CACHE_TTL_LISTINGS_SEC = 60s)
+  // and respects the snapshotBuffer minimum 60-second sampling throttle.
+  // Five genuine observations require approximately six minutes of continuous active dashboard use
+  // (Observation 1 at t=0m, 2 at t=1.5m, 3 at t=3m, 4 at t=4.5m, 5 at t=6m).
+  // Strictly active only when document.visibilityState === 'visible' to conserve CMC credits.
+  useEffect(() => {
+    const AUTO_REFRESH_INTERVAL_MS = 90_000
+    let timerId: ReturnType<typeof setTimeout> | null = null
+    let lastRefreshTime = Date.now()
+
+    function scheduleNextRefresh(delayMs = AUTO_REFRESH_INTERVAL_MS) {
+      if (timerId !== null) {
+        clearTimeout(timerId)
+        timerId = null
+      }
+      if (typeof document !== 'undefined' && document.visibilityState !== 'visible') {
+        return
+      }
+      timerId = setTimeout(async () => {
+        if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+          await handleRefresh()
+          lastRefreshTime = Date.now()
+          scheduleNextRefresh(AUTO_REFRESH_INTERVAL_MS)
+        }
+      }, Math.max(100, delayMs))
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        const elapsed = Date.now() - lastRefreshTime
+        if (elapsed >= AUTO_REFRESH_INTERVAL_MS) {
+          // Tab was backgrounded past interval: refresh immediately and start fresh cycle
+          void handleRefresh().then(() => {
+            lastRefreshTime = Date.now()
+          })
+          scheduleNextRefresh(AUTO_REFRESH_INTERVAL_MS)
+        } else {
+          // Resume scheduled remainder of the interval
+          scheduleNextRefresh(AUTO_REFRESH_INTERVAL_MS - elapsed)
+        }
+      } else {
+        // Tab hidden: pause automatic polling completely to preserve API budget
+        if (timerId !== null) {
+          clearTimeout(timerId)
+          timerId = null
+        }
+      }
+    }
+
+    if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+      scheduleNextRefresh(AUTO_REFRESH_INTERVAL_MS)
+    }
+
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+    }
+
+    return () => {
+      if (timerId !== null) {
+        clearTimeout(timerId)
+      }
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+      }
+    }
+  }, [handleRefresh])
 
   // Asset selection and investigation trigger
   const handleSelectAsset = async (symbol: string) => {
