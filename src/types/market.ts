@@ -92,3 +92,20 @@ export interface SystemHealthResponse {
     }
   }
 }
+
+export interface SnapshotRecord {
+  timestamp: string
+  epochMs: number
+  price: number
+  volume24h: number | null
+  percentChange1h: number | null
+  source: 'live_cmc'
+}
+
+export interface AssetSnapshotsResponse {
+  symbol: string
+  observationCount: number
+  status: 'SUFFICIENT_OBSERVATIONS' | 'INSUFFICIENT_OBSERVATIONS'
+  dataSource: 'live_cmc'
+  snapshots: SnapshotRecord[]
+}

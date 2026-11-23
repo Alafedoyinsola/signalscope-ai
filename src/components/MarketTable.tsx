@@ -1,11 +1,13 @@
-import { useMemo, useState } from 'react'
-import type { MarketQuote } from '../types/market.ts'
+import { useEffect, useMemo, useState } from 'react'
+import { api } from '../services/api.ts'
+import type { MarketQuote, SnapshotRecord } from '../types/market.ts'
 import {
   formatCurrency,
   formatNumber,
   formatPercent,
 } from '../utils/formatters.ts'
 import { CryptoLogo } from './CryptoLogo.tsx'
+import { Sparkline } from './Sparkline.tsx'
 
 interface MarketTableProps {
   quotes: MarketQuote[]
@@ -31,6 +33,46 @@ export function MarketTable({
         q.name.toLowerCase().includes(query)
     )
   }, [quotes, search])
+
+  const [snapshotsMap, setSnapshotsMap] = useState<Record<string, SnapshotRecord[]>>({})
+  const [isLoadingSnapshots, setIsLoadingSnapshots] = useState(false)
+
+  // Fetch local snapshots for quotes to power genuine intraday sparklines
+  useEffect(() => {
+    if (quotes.length === 0) return
+    let ignore = false
+
+    async function loadSnapshots() {
+      setIsLoadingSnapshots(true)
+      const fetched: Record<string, SnapshotRecord[]> = {}
+
+      await Promise.allSettled(
+        quotes.map(async (q) => {
+          try {
+            const res = await api.getSnapshots(q.symbol)
+            if (!ignore) {
+              fetched[q.symbol] = res.snapshots || []
+            }
+          } catch {
+            if (!ignore) {
+              fetched[q.symbol] = []
+            }
+          }
+        })
+      )
+
+      if (!ignore) {
+        setSnapshotsMap((prev) => ({ ...prev, ...fetched }))
+        setIsLoadingSnapshots(false)
+      }
+    }
+
+    void loadSnapshots()
+
+    return () => {
+      ignore = true
+    }
+  }, [quotes])
 
   return (
     <div className="card market-table-card">
@@ -95,6 +137,7 @@ export function MarketTable({
               <tr>
                 <th className="col-rank">#</th>
                 <th className="col-asset">ASSET</th>
+                <th className="col-trend">INTRADAY TREND</th>
                 <th className="col-price text-right">SPOT PRICE</th>
                 <th className="col-change text-right">1H</th>
                 <th className="col-change text-right">24H</th>
@@ -126,6 +169,13 @@ export function MarketTable({
                           <span className="asset-name text-muted">{q.name}</span>
                         </div>
                       </div>
+                    </td>
+                    <td className="col-trend">
+                      <Sparkline
+                        symbol={q.symbol}
+                        snapshots={snapshotsMap[q.symbol]}
+                        isLoading={isLoadingSnapshots && !snapshotsMap[q.symbol]}
+                      />
                     </td>
                     <td className="col-price font-mono font-medium text-right">
                       {formatCurrency(q.price)}

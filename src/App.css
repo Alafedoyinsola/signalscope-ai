@@ -851,6 +851,51 @@
   min-width: 175px;
 }
 
+.col-trend {
+  width: 125px;
+  min-width: 115px;
+  text-align: center;
+  padding: 5px 8px;
+}
+
+/* Institutional Intraday Sparkline */
+.sparkline-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.sparkline-svg {
+  display: block;
+}
+
+.sparkline-empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(20, 30, 40, 0.45);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 2px;
+}
+
+.sparkline-collecting {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.collecting-indicator {
+  color: var(--gold);
+  font-weight: 700;
+  opacity: 0.7;
+}
+
 .asset-cell {
   display: flex;
   align-items: center;

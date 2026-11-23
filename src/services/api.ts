@@ -7,6 +7,7 @@ import type {
   MarketOverviewResponse,
   MarketQuote,
   SystemHealthResponse,
+  AssetSnapshotsResponse,
 } from '../types/market.ts'
 
 export interface ApiError {
@@ -89,5 +90,10 @@ export const api = {
       },
     })
     return handleResponse<InvestigationAndExplanationResponse>(res)
+  },
+
+  async getSnapshots(symbol: string): Promise<AssetSnapshotsResponse> {
+    const res = await fetch(`/api/market/snapshots/${encodeURIComponent(symbol)}`)
+    return handleResponse<AssetSnapshotsResponse>(res)
   },
 }
